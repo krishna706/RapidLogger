@@ -9,6 +9,7 @@ And using rapid logger we can create video of the App from the device itself.
   #import "RapidLogger.h"
   
 2.In AppDelegate.m 
+
    -(BOOL)application:(UIApplication *)application didFinishLaunchingWithOptions:(NSDictionary *)launchOptions {
        // Override point for customization after application launch.
     
