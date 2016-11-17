@@ -5,6 +5,8 @@ And It also captures the crashes with screenshot and developer can able to scree
 
 And using rapid logger we can create video of the App from the device itself(Long press the rounded button for recording video).
 
+![alt tag](https://github.com/krishna706/RapidLogger/blob/master/IMG_0123.PNG)
+![alt tag](https://github.com/krishna706/RapidLogger/blob/master/IMG_0125.PNG)
 ![alt tag](https://github.com/krishna706/RapidLogger/blob/master/1.png)
 ![alt tag](https://github.com/krishna706/RapidLogger/blob/master/2.png)
 
