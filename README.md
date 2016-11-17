@@ -11,6 +11,7 @@ And using rapid logger we can create video of the App from the device itself.
 # How to use it
 
 1.Goto pch file and write below statement
+
   #import "RapidLogger.h"
   
 2.In AppDelegate.m 
