@@ -1,7 +1,9 @@
 # RapidLogger
 Rapid Logger captures all the log and able to display in device with neat UI.
+
 And It also captures the crashes and display it in a Device it self with Stack symobols.
-And using rapid logger we can create video of the App from the device itself.
+
+And using rapid logger we can create video of the App from the device itself(Long press the rounded button for recording video).
 
 ![alt tag](https://github.com/krishna706/RapidLogger/blob/master/1.png)
 ![alt tag](https://github.com/krishna706/RapidLogger/blob/master/2.png)
