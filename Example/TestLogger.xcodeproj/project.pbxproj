@@ -7,17 +7,21 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		9EA3D6311DDDB52B009DB0B3 /* RapidLogger.m in Sources */ = {isa = PBXBuildFile; fileRef = 9EA3D62E1DDDB52B009DB0B3 /* RapidLogger.m */; };
+		9EA3D6321DDDB52B009DB0B3 /* RapidScreenRecorder.m in Sources */ = {isa = PBXBuildFile; fileRef = 9EA3D6301DDDB52B009DB0B3 /* RapidScreenRecorder.m */; };
 		9EE65F591DD9BCE000DB995A /* main.m in Sources */ = {isa = PBXBuildFile; fileRef = 9EE65F581DD9BCE000DB995A /* main.m */; };
 		9EE65F5C1DD9BCE000DB995A /* AppDelegate.m in Sources */ = {isa = PBXBuildFile; fileRef = 9EE65F5B1DD9BCE000DB995A /* AppDelegate.m */; };
 		9EE65F5F1DD9BCE000DB995A /* ViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 9EE65F5E1DD9BCE000DB995A /* ViewController.m */; };
 		9EE65F621DD9BCE000DB995A /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 9EE65F601DD9BCE000DB995A /* Main.storyboard */; };
 		9EE65F641DD9BCE000DB995A /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 9EE65F631DD9BCE000DB995A /* Assets.xcassets */; };
 		9EE65F671DD9BCE000DB995A /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 9EE65F651DD9BCE000DB995A /* LaunchScreen.storyboard */; };
-		9EE65F731DD9BD0000DB995A /* RapidLogger.m in Sources */ = {isa = PBXBuildFile; fileRef = 9EE65F701DD9BD0000DB995A /* RapidLogger.m */; };
-		9EE65F741DD9BD0000DB995A /* RapidScreenRecorder.m in Sources */ = {isa = PBXBuildFile; fileRef = 9EE65F721DD9BD0000DB995A /* RapidScreenRecorder.m */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
+		9EA3D62D1DDDB52B009DB0B3 /* RapidLogger.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = RapidLogger.h; sourceTree = "<group>"; };
+		9EA3D62E1DDDB52B009DB0B3 /* RapidLogger.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = RapidLogger.m; sourceTree = "<group>"; };
+		9EA3D62F1DDDB52B009DB0B3 /* RapidScreenRecorder.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = RapidScreenRecorder.h; sourceTree = "<group>"; };
+		9EA3D6301DDDB52B009DB0B3 /* RapidScreenRecorder.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = RapidScreenRecorder.m; sourceTree = "<group>"; };
 		9EE65F541DD9BCE000DB995A /* TestLogger.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = TestLogger.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		9EE65F581DD9BCE000DB995A /* main.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = main.m; sourceTree = "<group>"; };
 		9EE65F5A1DD9BCE000DB995A /* AppDelegate.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = AppDelegate.h; sourceTree = "<group>"; };
@@ -28,10 +32,6 @@
 		9EE65F631DD9BCE000DB995A /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
 		9EE65F661DD9BCE000DB995A /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/LaunchScreen.storyboard; sourceTree = "<group>"; };
 		9EE65F681DD9BCE000DB995A /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
-		9EE65F6F1DD9BD0000DB995A /* RapidLogger.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = RapidLogger.h; sourceTree = "<group>"; };
-		9EE65F701DD9BD0000DB995A /* RapidLogger.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = RapidLogger.m; sourceTree = "<group>"; };
-		9EE65F711DD9BD0000DB995A /* RapidScreenRecorder.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = RapidScreenRecorder.h; sourceTree = "<group>"; };
-		9EE65F721DD9BD0000DB995A /* RapidScreenRecorder.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = RapidScreenRecorder.m; sourceTree = "<group>"; };
 		9EE65F751DD9BD2D00DB995A /* PrefixHeader.pch */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = PrefixHeader.pch; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
@@ -46,6 +46,18 @@
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
+		9EA3D62C1DDDB52B009DB0B3 /* RapidLogger */ = {
+			isa = PBXGroup;
+			children = (
+				9EA3D62D1DDDB52B009DB0B3 /* RapidLogger.h */,
+				9EA3D62E1DDDB52B009DB0B3 /* RapidLogger.m */,
+				9EA3D62F1DDDB52B009DB0B3 /* RapidScreenRecorder.h */,
+				9EA3D6301DDDB52B009DB0B3 /* RapidScreenRecorder.m */,
+			);
+			name = RapidLogger;
+			path = ../../RapidLogger;
+			sourceTree = "<group>";
+		};
 		9EE65F4B1DD9BCE000DB995A = {
 			isa = PBXGroup;
 			children = (
@@ -65,7 +77,7 @@
 		9EE65F561DD9BCE000DB995A /* TestLogger */ = {
 			isa = PBXGroup;
 			children = (
-				9EE65F6E1DD9BD0000DB995A /* RapidLogger */,
+				9EA3D62C1DDDB52B009DB0B3 /* RapidLogger */,
 				9EE65F5A1DD9BCE000DB995A /* AppDelegate.h */,
 				9EE65F5B1DD9BCE000DB995A /* AppDelegate.m */,
 				9EE65F5D1DD9BCE000DB995A /* ViewController.h */,
@@ -86,18 +98,6 @@
 				9EE65F581DD9BCE000DB995A /* main.m */,
 			);
 			name = "Supporting Files";
-			sourceTree = "<group>";
-		};
-		9EE65F6E1DD9BD0000DB995A /* RapidLogger */ = {
-			isa = PBXGroup;
-			children = (
-				9EE65F6F1DD9BD0000DB995A /* RapidLogger.h */,
-				9EE65F701DD9BD0000DB995A /* RapidLogger.m */,
-				9EE65F711DD9BD0000DB995A /* RapidScreenRecorder.h */,
-				9EE65F721DD9BD0000DB995A /* RapidScreenRecorder.m */,
-			);
-			name = RapidLogger;
-			path = ../../../RapidLogger;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
@@ -171,10 +171,10 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				9EE65F731DD9BD0000DB995A /* RapidLogger.m in Sources */,
+				9EA3D6311DDDB52B009DB0B3 /* RapidLogger.m in Sources */,
 				9EE65F5F1DD9BCE000DB995A /* ViewController.m in Sources */,
 				9EE65F5C1DD9BCE000DB995A /* AppDelegate.m in Sources */,
-				9EE65F741DD9BD0000DB995A /* RapidScreenRecorder.m in Sources */,
+				9EA3D6321DDDB52B009DB0B3 /* RapidScreenRecorder.m in Sources */,
 				9EE65F591DD9BCE000DB995A /* main.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -330,6 +330,7 @@
 				9EE65F6D1DD9BCE000DB995A /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
 		};
 /* End XCConfigurationList section */
 	};
