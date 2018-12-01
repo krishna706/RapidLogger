@@ -1,15 +1,11 @@
-//
-//  RapidLogger.h
-//  CreamStone
+//  RapidLogger.m
 //
 //  Created by RadhaKrishna on 24/05/16.
 //  Copyright © 2016 Radha. All rights reserved.
-//
 
 #import <UIKit/UIKit.h>
-#import "RapidScreenRecorder.h"
 
-#define LOG_ENABLED YES
+#define LOG_ENABLED 
 
 #define LOG_PATH  [NSString stringWithFormat:@"%@/Log",[NSSearchPathForDirectoriesInDomains(NSCachesDirectory, NSUserDomainMask, YES) objectAtIndex:0]]
 #define CRASH_PATH [NSString stringWithFormat:@"%@/crashesList.plist",LOG_PATH]
@@ -41,13 +37,13 @@ typedef enum : NSUInteger {
 
 @interface RapidLogger : UIViewController <UITableViewDelegate,UITableViewDataSource>
 {
-    NSMutableArray *loggerArray,*searchArray;
-    BOOL isTableDisplay,isSearching,isCrashList;
+
     NSTimer *recordTimer;
 }
 //Pass user values to store
 @property (nonatomic, strong) NSMutableString *userId;
-
+@property (nonatomic,strong) NSMutableArray *loggerArray,*searchArray;
+@property BOOL isTableDisplay,isSearching,isCrashList;
 @property BOOL isPresented,touchEnded;
 @property (nonatomic, strong) NSString *logContent;
 @property (nonatomic, strong) NSString *logPresentFileName,*selectedFilePath;
@@ -64,7 +60,7 @@ typedef enum : NSUInteger {
 -(void)addLoggerButton;
 -(void)hideLoggerButton;
 -(void)addLogger:(NSString *)str;
-
+-(void)printLog:(NSString*)msg;
 @end
 
 

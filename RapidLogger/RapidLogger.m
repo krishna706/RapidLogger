@@ -1,10 +1,7 @@
-//
 //  RapidLogger.m
-//  CreamStone
 //
 //  Created by RadhaKrishna on 24/05/16.
 //  Copyright © 2016 Radha. All rights reserved.
-//
 
 #import "RapidLogger.h"
 
@@ -36,7 +33,7 @@ static RapidLogger* sharedInstance = nil;
 
 - (void)viewDidLoad {
     self.title = @"Rapid Logger";
-    isTableDisplay = YES;
+    _isTableDisplay = YES;
     
    UIBarButtonItem *showListBtn = [[UIBarButtonItem alloc] initWithBarButtonSystemItem:UIBarButtonSystemItemOrganize target:self action:@selector(showList)];
     UIBarButtonItem *optionsBtn = [[UIBarButtonItem alloc] initWithBarButtonSystemItem:UIBarButtonSystemItemReply target:self action:@selector(optionsTapped)];
@@ -51,7 +48,7 @@ static RapidLogger* sharedInstance = nil;
     self.tableView = [[UITableView alloc] initWithFrame:CGRectMake(0, 64, self.view.frame.size.width, self.view.frame.size.height-64) style:UITableViewStylePlain];
     self.tableView.delegate = self;
     self.tableView.dataSource = self;
-    loggerArray = [[NSMutableArray alloc] init];
+    _loggerArray = [[NSMutableArray alloc] init];
     [self.view addSubview:self.tableView];
     [self.tableView setKeyboardDismissMode:UIScrollViewKeyboardDismissModeInteractive];
     
@@ -65,7 +62,7 @@ static RapidLogger* sharedInstance = nil;
 }
 -(void)viewWillAppear:(BOOL)animated
 {
-    if(isCrashList)
+    if(_isCrashList)
         return;
 
     
@@ -78,9 +75,10 @@ static RapidLogger* sharedInstance = nil;
     
     
     NSArray *fileContents = [self getLogList];
-    NSString *filePath =[NSString stringWithFormat:@"%@/%@",mainLogPath,fileContents[0]];
-
-    [sharedInstance displayUIWithPath:filePath];
+    if (fileContents.count >= 1) {
+        NSString *filePath =[NSString stringWithFormat:@"%@/%@",mainLogPath,fileContents[0]];
+        [sharedInstance displayUIWithPath:filePath];
+    }
     if (self.loggerBtn)
         self.loggerBtn.hidden = YES;
 }
@@ -94,9 +92,9 @@ static RapidLogger* sharedInstance = nil;
     if(self.isPresented)
        [self dismissViewControllerAnimated:YES completion:nil];
     
-    isCrashList = NO;
-    isSearching = NO;
-    loggerArray = [NSMutableArray new];
+    _isCrashList = NO;
+    _isSearching = NO;
+    _loggerArray = [NSMutableArray new];
     [self.tableView reloadData];
 }
 -(void)shareTapped
@@ -130,7 +128,7 @@ static RapidLogger* sharedInstance = nil;
 }
 -(void)showList
 {
-    isCrashList = NO;
+    _isCrashList = NO;
     NSString *docPath = [NSSearchPathForDirectoriesInDomains(NSCachesDirectory, NSUserDomainMask, YES) objectAtIndex:0];
     NSString *mainLogPath = [NSString stringWithFormat:@"%@/Log",docPath];
 
@@ -169,8 +167,8 @@ static RapidLogger* sharedInstance = nil;
                                         [[[UIAlertView alloc] initWithTitle:@"Message" message:@"No Crashes" delegate:nil cancelButtonTitle:@"Ok" otherButtonTitles:nil] show];
                                     else
                                     {
-                                        isCrashList = YES;
-                                        loggerArray = crashesArray;
+                                        _isCrashList = YES;
+                                        _loggerArray = crashesArray;
                                         [self.tableView reloadData];
                                         //self.txtView.text = [[crashesArray valueForKey:@"UnhandledExceptionReason"] componentsJoinedByString:@"\n\n\n\n\n\n"];
                                     }
@@ -188,15 +186,14 @@ static RapidLogger* sharedInstance = nil;
                                 {
                                     [@"" writeToFile:self.selectedFilePath atomically:YES encoding:NSUTF8StringEncoding error:nil];
                                      self.txtView.text = @"";
-                                    isCrashList = NO;
-                                    isSearching = NO;
+                                    _isCrashList = NO;
+                                    _isSearching = NO;
                                     _searchBar.text = @"";
-                                    loggerArray = [NSMutableArray new];
+                                    _loggerArray = [NSMutableArray new];
                                     [self.tableView reloadData];
                                     
                                     [alertController dismissViewControllerAnimated:YES completion:nil];
                                 }]];
-    
     [alertController addAction:[UIAlertAction actionWithTitle:@"Cancel" style:UIAlertActionStyleCancel handler:^(UIAlertAction*action)
                                 {
                                     [alertController dismissViewControllerAnimated:YES completion:nil];
@@ -210,13 +207,14 @@ static RapidLogger* sharedInstance = nil;
 }
 -(void)displayUIWithPath:(NSString *)path
 {
-    isCrashList = NO;
+    _isCrashList = NO;
     self.selectedFilePath = path;
     NSString *fileContent = [NSString stringWithContentsOfFile:self.selectedFilePath encoding:NSUTF8StringEncoding error:nil];
-    if(isTableDisplay)
+    if(_isTableDisplay)
     {
-        loggerArray = [NSMutableArray arrayWithArray:[fileContent componentsSeparatedByString:LOG_SEPARATOR]];
-        [loggerArray removeObjectAtIndex:0];
+        _loggerArray = [NSMutableArray arrayWithArray:[fileContent componentsSeparatedByString:LOG_SEPARATOR]];
+        if (_loggerArray.count >= 1)
+            [_loggerArray removeObjectAtIndex:0];
         
         [self.tableView reloadData];
         //self.txtView.text = fileContent;
@@ -275,6 +273,12 @@ static RapidLogger* sharedInstance = nil;
 {
     if (!self.loggerBtn)
     {
+        [NSTimer scheduledTimerWithTimeInterval:5.0 repeats:YES block:^(NSTimer * _Nonnull timer) {
+             dispatch_async(dispatch_get_main_queue(), ^{
+                [self addLoggerButton];
+            });
+        }];
+        
         NSLog(@"Welcome to the Rapid Logger.");
          self.loggerBtn = [[UIButton alloc] initWithFrame:CGRectMake(0, 100, 60, 60)];
         [self.loggerBtn setBackgroundColor:[UIColor redColor]];
@@ -298,20 +302,29 @@ static RapidLogger* sharedInstance = nil;
     [[[UIApplication sharedApplication] keyWindow] bringSubviewToFront:self.loggerBtn];
 }
 
+-(void)printLog:(NSString*)msg {
+    NSLog(@"%@",msg);
+}
 - (IBAction) imageMoved:(id) sender withEvent:(UIEvent *) event
 {
     self.touchEnded = YES;
     CGPoint point = [[[event allTouches] anyObject] locationInView:self.view];
+    UIControl *control = sender;
+
+    if(point.y < 0) {
+        point.y = control.center.y;
+    }
+    if(point.x < 0) {
+        point.x = control.center.x;
+    }
     //point.x = point.x/2;
     //point.y = point.y/2;
     
-    UIControl *control = sender;
+   // UIControl *control = sender;
     //NSLog(@"Logger Button Moved : %@",NSStringFromCGPoint(point));
 
     if(CGRectContainsPoint([UIScreen mainScreen].bounds, point))
     {
-        if(![ASScreenRecorder sharedInstance].isRecording)
-            control.alpha = 0.6;
         control.center = point;
     }
 }
@@ -328,11 +341,6 @@ static RapidLogger* sharedInstance = nil;
         [(UIButton *)[longPress view] setAlpha:0.6];
     }];
     
-    if([ASScreenRecorder sharedInstance].isRecording)
-    {
-        [self stopRecording];
-        return;
-    }
     UIAlertController*alertController = [UIAlertController alertControllerWithTitle:@"Do you want to Record the app flow" message:@"" preferredStyle:UIAlertControllerStyleActionSheet];
     
     [alertController addAction:[UIAlertAction actionWithTitle:@"YES" style:UIAlertActionStyleDefault handler:^(UIAlertAction*action)
@@ -361,11 +369,7 @@ static RapidLogger* sharedInstance = nil;
 
         return;
     }
-    if([ASScreenRecorder sharedInstance].isRecording)
-    {
-        [self stopRecording];
-        return;
-    }
+
     self.mainController = [RapidLogger topMostController];
     
      [RapidLogger sharedController].isPresented = YES;
@@ -385,8 +389,6 @@ static RapidLogger* sharedInstance = nil;
     
     [UIView animateWithDuration:0.5 animations:^{
         btn.center = point;
-        if(![ASScreenRecorder sharedInstance].isRecording)
-        btn.alpha = 0.6;
     }];
 
 }
@@ -468,7 +470,7 @@ static RapidLogger* sharedInstance = nil;
 - (void)searchBarTextDidBeginEditing:(UISearchBar *)searchBar
 {
     ///searchBar.showsCancelButton = YES;
-    isSearching = YES;
+    _isSearching = YES;
     
 }
 - (void)searchBarSearchButtonClicked:(UISearchBar *)searchBar
@@ -479,38 +481,40 @@ static RapidLogger* sharedInstance = nil;
 
 - (void)searchBarTextDidEndEditing:(UISearchBar *)searchBar
 {
-    isSearching = NO;
+    _isSearching = NO;
 }
 - (void)searchBar:(UISearchBar *)searchBar textDidChange:(NSString *)searchText
 {
     NSLog(@"textDidChange called serch text is %@",searchText);
     if(searchText.length == 0)
     {
-        searchArray = loggerArray;
+        _searchArray = _loggerArray;
         [self.tableView reloadData];
         
         return;
     }
     
     //beginswith , contains
-    searchArray = [loggerArray filteredArrayUsingPredicate:
+    _searchArray = [_loggerArray filteredArrayUsingPredicate:
                    [NSPredicate predicateWithFormat:@"(SELF contains[cd] %@)", searchText]];
     [self.tableView reloadData];
 }
 
 #pragma mark - UITableViewDataSource
 - (NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section {
-    if (isCrashList)
-        return  loggerArray.count;
+    if (_isCrashList)
+    return  _loggerArray.count;
 
-    if(isSearching)
-        return searchArray.count;
-    return loggerArray.count;
+    if(_isSearching)
+        return _searchArray.count;
+    //return 0;
+    return _loggerArray.count;
+    //_loggerArray.count;
 }
 
 - (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath {
     
-    if (isCrashList) {
+    if (_isCrashList) {
         UITableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:@"CrashCell"];
         if(!cell)
             cell = [[UITableViewCell alloc] initWithStyle:UITableViewCellStyleSubtitle reuseIdentifier:@"CrashCell"];
@@ -526,7 +530,7 @@ static RapidLogger* sharedInstance = nil;
                 imgView.layer.masksToBounds = YES;
         [cell addSubview:imgView];
         
-        imgView.image = [UIImage imageWithData:[loggerArray[indexPath.row] valueForKey:kKEY_ExceptionScreenshot]];
+        imgView.image = [UIImage imageWithData:[_loggerArray[indexPath.row] valueForKey:kKEY_ExceptionScreenshot]];
         imgView.layer.borderWidth = 1.0;
         imgView.layer.borderColor = [[UIColor grayColor] CGColor];
         
@@ -534,7 +538,7 @@ static RapidLogger* sharedInstance = nil;
         UILabel *lblHeading = [cell viewWithTag:4];
         if(!lblHeading)
             lblHeading = [[UILabel alloc] initWithFrame:CGRectMake(imgView.frame.size.width + 15, 10, self.view.frame.size.width*0.7, 70)];
-        lblHeading.text =[loggerArray[indexPath.row] valueForKey:kKEY_ExceptionReason];
+        lblHeading.text =[_loggerArray[indexPath.row] valueForKey:kKEY_ExceptionReason];
         lblHeading.numberOfLines = 4;
         lblHeading.tag = 4;
 
@@ -544,7 +548,7 @@ static RapidLogger* sharedInstance = nil;
 
         
         //TextView
-        NSString *textStr = [loggerArray[indexPath.row] valueForKey:kKEY_ExceptionCallStack];
+        NSString *textStr = [_loggerArray[indexPath.row] valueForKey:kKEY_ExceptionCallStack];
         UITextView *txtView = [cell viewWithTag:3];
         if(!txtView)
             txtView = [[UITextView alloc] initWithFrame:CGRectMake(imgView.frame.size.width + 15, 10+lblHeading.frame.size.height, self.view.frame.size.width*0.7, cellHeight - 2*10 - lblHeading.frame.size.height)];
@@ -563,7 +567,7 @@ static RapidLogger* sharedInstance = nil;
         if(!lblFixed)
             lblFixed = [[UILabel alloc] initWithFrame:CGRectMake(0, 0, 200, 200)];
         
-        if([[loggerArray[indexPath.row] valueForKey:kKEY_ExceptionStatus] isEqualToString:CRASH_STATUS_FIXED])
+        if([[_loggerArray[indexPath.row] valueForKey:kKEY_ExceptionStatus] isEqualToString:CRASH_STATUS_FIXED])
         {
             cell.contentView.layer.borderColor = [[UIColor lightGrayColor] CGColor];
             cell.contentView.layer.borderWidth = 5;
@@ -613,7 +617,7 @@ static RapidLogger* sharedInstance = nil;
         if(!cell)
             cell = [[UITableViewCell alloc] initWithStyle:UITableViewCellStyleSubtitle reuseIdentifier:@"Cell"];
         NSString *textStr;
-        textStr = isSearching?searchArray[indexPath.row]:loggerArray[indexPath.row];
+        textStr = _isSearching?_searchArray[indexPath.row]:_loggerArray[indexPath.row];
         NSString *dateStr = @"";
         if(textStr.length > 23)
         {
@@ -638,7 +642,7 @@ static RapidLogger* sharedInstance = nil;
 
 #pragma mark - UITableViewDelegate
 - (CGFloat)tableView:(UITableView *)tableView heightForRowAtIndexPath:(NSIndexPath *)indexPath {
-    if (isCrashList) {
+    if (_isCrashList) {
         return 300;
     }
     return 85;
@@ -646,12 +650,12 @@ static RapidLogger* sharedInstance = nil;
 
 - (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath {
     [tableView deselectRowAtIndexPath:indexPath animated:YES];
-    if (isCrashList) {
+    if (_isCrashList) {
         [self crashSelectedWith:indexPath];
     }
     else
     {
-        NSString *textStr = isSearching?searchArray[indexPath.row]:loggerArray[indexPath.row];
+        NSString *textStr = _isSearching?_searchArray[indexPath.row]:_loggerArray[indexPath.row];
         NSString *dateStr = @"";
         if(textStr.length > 23)
         {
@@ -675,7 +679,7 @@ static RapidLogger* sharedInstance = nil;
 }
 -(void)crashSelectedWith:(NSIndexPath *)indexPath
 {
-    NSString *textStr = [loggerArray[indexPath.row] valueForKey:kKEY_ExceptionCallStack];
+    NSString *textStr = [_loggerArray[indexPath.row] valueForKey:kKEY_ExceptionCallStack];
     NSMutableArray *crashesArray = [NSMutableArray arrayWithContentsOfFile:CRASH_PATH];
     NSMutableDictionary *crashDict = [[NSMutableDictionary alloc] initWithDictionary:crashesArray[indexPath.row]];
 
@@ -692,7 +696,7 @@ static RapidLogger* sharedInstance = nil;
     
     [alertController addAction:[UIAlertAction actionWithTitle:@"Share" style:UIAlertActionStyleDefault handler:^(UIAlertAction*action)
                                 {
-                                    [self shareMessageText:textStr UrlStr:[UIImage imageWithData:[loggerArray[indexPath.row] valueForKey:kKEY_ExceptionScreenshot]] forController:self];
+                                    [self shareMessageText:textStr UrlStr:[UIImage imageWithData:[_loggerArray[indexPath.row] valueForKey:kKEY_ExceptionScreenshot]] forController:self];
                                     
                                     [alertController dismissViewControllerAnimated:YES completion:nil];
                                 }]];
@@ -738,8 +742,8 @@ static RapidLogger* sharedInstance = nil;
 -(void)loadCrashList
 {
     NSMutableArray *crashesArray = [NSMutableArray arrayWithContentsOfFile:CRASH_PATH];
-    loggerArray = crashesArray;
-    isCrashList = YES;
+    _loggerArray = crashesArray;
+    _isCrashList = YES;
     [self.tableView reloadData];
 }
 
@@ -758,8 +762,6 @@ static RapidLogger* sharedInstance = nil;
         recordTimer = nil;
     }
     recordTimer = [NSTimer scheduledTimerWithTimeInterval:1.0 target:self selector:@selector(changeColorsForView:) userInfo:nil repeats:YES];
-    
-    [[ASScreenRecorder sharedInstance] startRecording];
 }
 -(void)changeColorsForView:(id)sender
 {
@@ -782,29 +784,7 @@ static RapidLogger* sharedInstance = nil;
 //    }];
 }
 
--(void)stopRecording
-{
-    if(recordTimer)
-    {
-        [recordTimer invalidate];
-        recordTimer = nil;
-    }
-    if ([ASScreenRecorder sharedInstance].isRecording)
-    {
-        [_loggerBtn setTitle:@"" forState:UIControlStateNormal];
 
-        [[ASScreenRecorder sharedInstance] stopRecordingWithCompletion:^{
-            NSLog(@"Finished recording");
-            [[[UIAlertView alloc] initWithTitle:@"Recording" message:@"Screen Video is saved in gallery!!!!" delegate:nil cancelButtonTitle:@"Okey" otherButtonTitles:nil] show];
-            //[self playEndSound];
-            
-            [UIView animateWithDuration:2.0 animations:^{
-                [_loggerBtn setBackgroundColor:[UIColor redColor]];
-            }];
-        }];
-        return;
-    }
-}
 
 //- (void)playStartSound
 //{
